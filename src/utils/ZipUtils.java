@@ -2,10 +2,7 @@ package utils;
 
 import java.io.*;
 import java.util.List;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import java.util.zip.*;
 
 public class ZipUtils {
 
@@ -153,12 +150,13 @@ public class ZipUtils {
 
 	/**
 	 * 压缩文件夹.
+	 *
 	 * @param srcPath
 	 * @throws IOException
 	 */
 	public static void compress(String srcPath) throws IOException {
 		File srcFile = new File(srcPath);
-		File dstFile = new File(dstPath + ".zip");
+		File dstFile = new File(srcPath + ".zip");
 		if (!srcFile.exists()) {
 			throw new FileNotFoundException(srcPath + "不存在！");
 		}
