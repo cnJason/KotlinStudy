@@ -1,7 +1,5 @@
 package utils;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.*;
 import java.util.List;
 import java.util.zip.Deflater;
@@ -36,6 +34,38 @@ public class ZipUtils {
 
 	}
 
+	/**
+	 * 复制文件到指定文件夹.
+	 *
+	 * @param folderPath      文件夹路径
+	 * @param originfileList  文件列表
+	 * @param currentNameList 当前文件列表
+	 */
+	public static void copyToFolder(String folderPath, List<String> originfileList, List<String> currentNameList) {
+		try {
+			int byteSum = 0;
+			int byteRead = 0;
+			for (int i = 0; i < originfileList.size(); i++) {
+				File oldfile = new File(originfileList.get(i));
+				if (oldfile.exists()) {
+					InputStream inStream = new FileInputStream(oldfile);
+					FileOutputStream fs = new FileOutputStream(folderPath + currentNameList.get(i));
+					byte[] buffer = new byte[1444];
+					while ((byteRead = inStream.read(buffer)) != -1) {
+						byteSum += byteRead;
+						fs.write(buffer, 0, byteRead);
+					}
+					inStream.close();
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("复制文件操作出错");
+			e.printStackTrace();
+
+		}
+
+	}
+
 
 	/**
 	 * 解压文件.
@@ -49,7 +79,7 @@ public class ZipUtils {
 		try {
 			zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)));
 			File outputFile = null;
-			 parent = file.getParent();
+			parent = file.getParent();
 			ZipEntry entry;
 			while ((entry = zis.getNextEntry()) != null && !entry.isDirectory()) {
 				outputFile = new File(parent, entry.getName());
@@ -78,16 +108,17 @@ public class ZipUtils {
 
 	/**
 	 * 重命名.
-	 * @param originName 源文件
+	 *
+	 * @param originName  源文件
 	 * @param currentName 目标文件.
 	 */
-	public static Boolean rename(String originName, String currentName){
-      File file = new File(originName);
-      File currentFile = new File(currentName);
-      if(file.renameTo(currentFile)){
-      	return true;
-      }
-      return false;
+	public static Boolean rename(String originName, String currentName) {
+		File file = new File(originName);
+		File currentFile = new File(currentName);
+		if (file.renameTo(currentFile)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
